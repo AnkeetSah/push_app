@@ -23,7 +23,7 @@
                     userVisibleOnly: true,
                     applicationServerKey: 'BA4MxFbqv-Tx-bZ9M6s_mNt9LstHI_jFWgC-JMOEANJnujrmqhCBgDpp2fvZE2GeksT9uHdl3Qf08ppYSqkxBMc' // Your public VAPID key
                 });
-
+                console.log(pushSubscription);
                 // Send pushSubscription details to the server
                 await fetch('/subscribe', {
                     method: 'POST',
