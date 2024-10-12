@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Push Notifications</title>
+</head>
+<body>
+    <button onclick="subscribe()">Subscribe</button>
+
+    <script>
+        async function subscribe() {
+            try {
+                const permission = await Notification.requestPermission();
+                if (permission !== 'granted') {
+                    console.error('Notification permission denied');
+                    return;
+                }
+
+                let sw = await navigator.serviceWorker.ready;
+                let pushSubscription = await sw.pushManager.subscribe({
+                    userVisibleOnly: true,
+                    applicationServerKey: 'BA4MxFbqv-Tx-bZ9M6s_mNt9LstHI_jFWgC-JMOEANJnujrmqhCBgDpp2fvZE2GeksT9uHdl3Qf08ppYSqkxBMc' // Your public VAPID key
+                });
+
+                // Send pushSubscription details to the server
+                await fetch('/subscribe', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(pushSubscription)
+                });
+
+                console.log('Push subscription:', JSON.stringify(pushSubscription));
+            } catch (error) {
+                console.error('Error subscribing:', error);
+            }
+        }
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', async () => {
+                try {
+                    let sw = await navigator.serviceWorker.register('./sw.js');
+                    console.log('Service Worker registered:', sw);
+                } catch (error) {
+                    console.error('Service Worker registration failed:', error);
+                }
+            });
+        }
+    </script>
+</body>
+</html>
