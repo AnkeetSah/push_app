@@ -5,12 +5,127 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Push Notifications</title>
+    <style>
+        /* Basic reset */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Modal styling */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.show {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .modal {
+            background: white;
+            width: 300px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        .modal h2 {
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .modal button {
+            padding: 10px 15px;
+            font-size: 14px;
+            margin: 5px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .confirm-btn {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .cancel-btn {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .confirm-btn:hover {
+            background-color: #218838;
+        }
+
+        .cancel-btn:hover {
+            background-color: #c82333;
+        }
+    </style>
 </head>
 <body>
-    <button onclick="subscribe()">Subscribe</button>
+    <button onclick="showModal()">Subscribe</button>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="confirmationModal">
+        <div class="modal">
+            <h2>Are you sure you want to subscribe?</h2>
+            <button class="confirm-btn" onclick="confirmSubscription()">Yes, Subscribe</button>
+            <button class="cancel-btn" onclick="hideModal()">Cancel</button>
+        </div>
+    </div>
 
     <script>
-        async function subscribe() {
+        // Show modal function
+        function showModal() {
+            document.getElementById('confirmationModal').classList.add('show');
+        }
+
+        // Hide modal function
+        function hideModal() {
+            document.getElementById('confirmationModal').classList.remove('show');
+        }
+
+        // Subscription function
+        async function confirmSubscription() {
+            hideModal(); // Hide the modal after confirmation
             try {
                 const permission = await Notification.requestPermission();
                 if (permission !== 'granted') {
@@ -39,6 +154,7 @@
             }
         }
 
+        // Register service worker
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', async () => {
                 try {
