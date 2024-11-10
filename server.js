@@ -39,12 +39,11 @@ app.post('/subscribe', (req, res) => {
   if (alreadySubscribed) {
     // If subscription already exists, respond with a message
     return res.status(200).json({ message: 'Already subscribed!' });
-  }
-
-  // Add the subscription to the list if it doesn't exist
-  subscriptions.push(subscription);
+  }else{
+    subscriptions.push(subscription);
   console.log('New Subscription Added:', JSON.stringify(subscription, null, 2));
 
+  }
   res.status(201).json({ message: 'Subscription received!' });
 });
 
