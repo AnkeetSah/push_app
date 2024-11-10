@@ -27,16 +27,28 @@ app.get('/', (req, res) => {
 });
 
 // Endpoint to handle subscription (when the user clicks 'Subscribe')
+const subscriptions = []; // Array to store unique subscriptions
+
 app.post('/subscribe', (req, res) => {
   const subscription = req.body;
 
-  console.log('Received Subscription:', JSON.stringify(subscription, null, 2));
+  // Check if the subscription already exists
+  const alreadySubscribed = subscriptions.some((sub) => 
+    sub.endpoint === subscription.endpoint
+  );
 
-  // Add the subscription to the list
+  if (alreadySubscribed) {
+    // If subscription already exists, respond with a message
+    return res.status(200).json({ message: 'Already subscribed!' });
+  }
+
+  // Add the subscription to the list if it doesn't exist
   subscriptions.push(subscription);
+  console.log('New Subscription Added:', JSON.stringify(subscription, null, 2));
 
   res.status(201).json({ message: 'Subscription received!' });
 });
+
 
 // Endpoint to send notifications (this will be called from the backend)
 app.post('/send-notification', (req, res) => {
