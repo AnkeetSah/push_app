@@ -5,11 +5,84 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Push Notifications</title>
+    <style>
+        /* General reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #444;
+        }
+
+        button {
+            padding: 12px 20px;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        button:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            background-color: #388e3c;
+            transform: translateY(1px);
+        }
+
+        button:focus {
+            outline: none;
+        }
+
+        /* Optional: Add a simple container for a message */
+        .message {
+            font-size: 1.1rem;
+            margin-top: 20px;
+            color: #555;
+        }
+    </style>
 </head>
 <body>
-    <button onclick="subscribe()">Subscribe</button>
+    <div>
+        <h1>Push Notifications</h1>
+        <button onclick="askSubscription()">Subscribe</button>
+        <div class="message"></div>
+    </div>
 
     <script>
+        async function askSubscription() {
+            // Ask the user for confirmation before subscribing
+            const isConfirmed = confirm("Do you want to subscribe to push notifications?");
+            
+            if (isConfirmed) {
+                await subscribe();
+            } else {
+                document.querySelector('.message').textContent = 'Subscription cancelled.';
+            }
+        }
+
         async function subscribe() {
             try {
                 const permission = await Notification.requestPermission();
@@ -34,8 +107,10 @@
                 });
 
                 console.log('Push subscription:', JSON.stringify(pushSubscription));
+                document.querySelector('.message').textContent = 'Subscription successful! You will receive notifications soon.';
             } catch (error) {
                 console.error('Error subscribing:', error);
+                document.querySelector('.message').textContent = 'Subscription failed. Please try again.';
             }
         }
 

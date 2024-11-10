@@ -30,7 +30,9 @@ const subscriptions = []; // Array to store unique subscriptions
 
 app.post('/subscribe', (req, res) => {
   const subscription = req.body;
+  const length = subscriptions.length;
 
+  console.log("Number of subscriber "+length); 
   // Check if the subscription already exists
   const alreadySubscribed = subscriptions.some((sub) => 
     sub.endpoint === subscription.endpoint
