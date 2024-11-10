@@ -18,8 +18,7 @@ const vapidKeys = {
 
 webpush.setVapidDetails('mailto:example@yourdomain.org', vapidKeys.publicKey, vapidKeys.privateKey);
 
-// In-memory storage for subscriptions (this can be replaced by a database)
-let subscriptions = [];
+
 
 // Serve the index.ejs page
 app.get('/', (req, res) => {
